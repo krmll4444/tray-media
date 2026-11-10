@@ -7,6 +7,10 @@ Windows 10 Fluent tray media popover. Controls system Now Playing via SMTC.
 **Stack:** C# / WPF  
 **License:** [MIT](LICENSE) © 2026 krmll4444
 
+## Download
+
+[Latest release](https://github.com/krmll4444/tray-media/releases/latest)
+
 ## Dev
 
 Requires [.NET 7 SDK](https://dotnet.microsoft.com/download/dotnet/7.0) with the Windows Desktop workload.
