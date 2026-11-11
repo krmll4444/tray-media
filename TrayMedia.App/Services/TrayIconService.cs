@@ -24,7 +24,7 @@ public sealed class TrayIconService : IDisposable
         _menu = new ContextMenuStrip();
         _menu.Items.Add("Settings", null, (_, _) => SettingsRequested?.Invoke(this, EventArgs.Empty));
         _menu.Items.Add(new ToolStripSeparator());
-        _menu.Items.Add("Вийти", null, (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty));
+        _menu.Items.Add("Quit", null, (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty));
 
         _notifyIcon = new NotifyIcon
         {
@@ -86,15 +86,15 @@ public sealed class TrayIconService : IDisposable
 
         if (state.IsEmpty)
         {
-            _notifyIcon.Text = Truncate("Tray Media — нічого не відтворюється");
+            _notifyIcon.Text = Truncate("Tray Media — nothing is playing");
         }
         else if (state.IsPlaying)
         {
-            _notifyIcon.Text = Truncate($"Пауза — {state.Title}");
+            _notifyIcon.Text = Truncate($"Pause — {state.Title}");
         }
         else
         {
-            _notifyIcon.Text = Truncate($"Відтворити — {state.Title}");
+            _notifyIcon.Text = Truncate($"Play — {state.Title}");
         }
     }
 

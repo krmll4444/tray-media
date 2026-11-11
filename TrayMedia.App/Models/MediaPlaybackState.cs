@@ -5,8 +5,8 @@ public sealed class MediaPlaybackState
     public static MediaPlaybackState Empty { get; } = new()
     {
         IsEmpty = true,
-        Title = "Нічого не відтворюється",
-        Artist = "Запустіть музику в іншому додатку",
+        Title = "Nothing is playing",
+        Artist = "Start media in another app",
     };
 
     public bool IsEmpty { get; init; }

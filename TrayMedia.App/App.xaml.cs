@@ -76,7 +76,7 @@ public partial class App : System.Windows.Application
             _playerState = new MediaPlaybackState
             {
                 IsEmpty = true,
-                Title = "SMTC недоступний",
+                Title = "SMTC unavailable",
                 Artist = ex.Message,
             };
             _tray.Update(_playerState, _theme.IsDark);

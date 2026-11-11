@@ -89,7 +89,7 @@ public partial class MainWindow : Window
 
         PlayIcon.Visibility = state.IsPlaying ? Visibility.Collapsed : Visibility.Visible;
         PauseIcon.Visibility = state.IsPlaying ? Visibility.Visible : Visibility.Collapsed;
-        PlayBtn.ToolTip = state.IsPlaying ? "Пауза" : "Відтворення";
+        PlayBtn.ToolTip = state.IsPlaying ? "Pause" : "Play";
 
         PlayBtn.IsEnabled = !(state.IsEmpty && !state.CanPlay && !state.CanPause);
         PrevBtn.IsEnabled = !state.IsEmpty && state.CanPrevious;

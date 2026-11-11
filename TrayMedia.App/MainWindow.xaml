@@ -126,7 +126,7 @@
         <Button x:Name="PrevBtn"
                 Style="{StaticResource CtrlButton}"
                 Click="OnPrevClick"
-                ToolTip="Попередній трек">
+                ToolTip="Previous track">
           <Path x:Name="PrevIcon"
                 Width="16" Height="16"
                 Stretch="Uniform"
@@ -136,7 +136,7 @@
         <Button x:Name="PlayBtn"
                 Style="{StaticResource CtrlButton}"
                 Click="OnPlayClick"
-                ToolTip="Відтворення">
+                ToolTip="Play">
           <Grid Width="18" Height="18">
             <Path x:Name="PlayIcon"
                   Width="18" Height="18"
@@ -154,7 +154,7 @@
         <Button x:Name="NextBtn"
                 Style="{StaticResource CtrlButton}"
                 Click="OnNextClick"
-                ToolTip="Наступний трек">
+                ToolTip="Next track">
           <Path x:Name="NextIcon"
                 Width="16" Height="16"
                 Stretch="Uniform"

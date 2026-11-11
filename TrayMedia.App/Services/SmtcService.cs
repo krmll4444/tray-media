@@ -213,7 +213,7 @@ public sealed class SmtcService : IDisposable
             IsEmpty = empty,
             Title = empty
                 ? MediaPlaybackState.Empty.Title
-                : (string.IsNullOrWhiteSpace(title) ? "Невідомий трек" : title),
+                : (string.IsNullOrWhiteSpace(title) ? "Unknown track" : title),
             Artist = empty
                 ? MediaPlaybackState.Empty.Artist
                 : (string.IsNullOrWhiteSpace(artist) ? PrettyAppName(appId) : artist),
@@ -283,7 +283,7 @@ public sealed class SmtcService : IDisposable
 
     private static string PrettyAppName(string appId)
     {
-        if (string.IsNullOrWhiteSpace(appId)) return "Медіа";
+        if (string.IsNullOrWhiteSpace(appId)) return "Media";
         var leaf = appId.Split('!').FirstOrDefault() ?? appId;
         leaf = leaf.Split('.').LastOrDefault() ?? leaf;
         return leaf;
