@@ -12,49 +12,59 @@ public static class PopoverPositioner
             trayBounds.Y + trayBounds.Height / 2);
 
         var screen = Screen.FromPoint(point);
-        var work = screen.WorkingArea;
-        var bounds = screen.Bounds;
+        return Place(trayBounds, windowSize, screen.Bounds, screen.WorkingArea);
+    }
+
+    /// <summary>
+    /// Pure layout helper — used by unit tests without depending on live Screen APIs.
+    /// </summary>
+    public static Point Place(
+        Rectangle trayBounds,
+        Size windowSize,
+        Rectangle displayBounds,
+        Rectangle workArea)
+    {
         const int gap = 4;
         var width = windowSize.Width;
         var height = windowSize.Height;
         var trayValid = trayBounds.Width > 0 && trayBounds.Height > 0;
-        var side = DetectTaskbarSide(bounds, work);
+        var side = DetectTaskbarSide(displayBounds, workArea);
 
         int x;
         int y;
 
         if (!trayValid)
         {
-            x = work.Right - width - 8;
-            y = work.Bottom - height - 8;
+            x = workArea.Right - width - 8;
+            y = workArea.Bottom - height - 8;
         }
         else if (side == "top")
         {
             x = trayBounds.X + trayBounds.Width / 2 - width / 2;
-            y = work.Top + gap;
+            y = workArea.Top + gap;
         }
         else if (side == "left")
         {
-            x = work.Left + gap;
+            x = workArea.Left + gap;
             y = trayBounds.Y + trayBounds.Height / 2 - height / 2;
         }
         else if (side == "right")
         {
-            x = work.Right - width - gap;
+            x = workArea.Right - width - gap;
             y = trayBounds.Y + trayBounds.Height / 2 - height / 2;
         }
         else
         {
             x = trayBounds.X + trayBounds.Width / 2 - width / 2;
-            y = Math.Min(trayBounds.Y - height - gap, work.Bottom - height - gap);
+            y = Math.Min(trayBounds.Y - height - gap, workArea.Bottom - height - gap);
         }
 
-        x = Clamp(x, work.Left + 4, work.Right - width - 4);
-        y = Clamp(y, work.Top + 4, work.Bottom - height - 4);
+        x = Clamp(x, workArea.Left + 4, workArea.Right - width - 4);
+        y = Clamp(y, workArea.Top + 4, workArea.Bottom - height - 4);
         return new Point(x, y);
     }
 
-    private static string DetectTaskbarSide(Rectangle displayBounds, Rectangle workArea)
+    public static string DetectTaskbarSide(Rectangle displayBounds, Rectangle workArea)
     {
         if (workArea.Y > displayBounds.Y + 2) return "top";
         if (workArea.X > displayBounds.X + 2) return "left";
@@ -63,5 +73,5 @@ public static class PopoverPositioner
         return "bottom";
     }
 
-    private static int Clamp(int value, int min, int max) => Math.Min(Math.Max(value, min), max);
+    public static int Clamp(int value, int min, int max) => Math.Min(Math.Max(value, min), max);
 }

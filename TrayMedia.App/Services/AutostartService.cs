@@ -36,6 +36,37 @@ public static class AutostartService
         var exe = Environment.ProcessPath
                    ?? Process.GetCurrentProcess().MainModule?.FileName
                    ?? Path.Combine(AppContext.BaseDirectory, "TrayMedia.exe");
-        key.SetValue(ValueName, $"\"{exe}\"");
+
+        var runValue = BuildRunValue(exe);
+        if (runValue is null) return;
+
+        key.SetValue(ValueName, runValue);
+    }
+
+    /// <summary>
+    /// Builds a safe HKCU Run value. Rejects quote / path injection.
+    /// </summary>
+    public static string? BuildRunValue(string? exePath)
+    {
+        if (string.IsNullOrWhiteSpace(exePath)) return null;
+
+        string full;
+        try
+        {
+            full = Path.GetFullPath(exePath.Trim());
+        }
+        catch
+        {
+            return null;
+        }
+
+        if (full.IndexOf('"') >= 0) return null;
+        if (full.IndexOfAny(new[] { '\r', '\n', '\0' }) >= 0) return null;
+        if (!full.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)) return null;
+
+        var name = Path.GetFileNameWithoutExtension(full);
+        if (!name.Equals("TrayMedia", StringComparison.OrdinalIgnoreCase)) return null;
+
+        return $"\"{full}\"";
     }
 }

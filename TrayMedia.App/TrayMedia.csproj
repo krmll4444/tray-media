@@ -15,6 +15,9 @@
     <Version>1.0.0-beta.1</Version>
     <Company>krmll4444</Company>
     <Authors>krmll4444</Authors>
+    <Copyright>Copyright (c) 2026 krmll4444</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/krmll4444/tray-media</PackageProjectUrl>
     <Description>Windows 10 Fluent tray media popover with SMTC control</Description>
     <LangVersion>latest</LangVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>

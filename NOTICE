@@ -1,0 +1,20 @@
+Tray Media
+Copyright (c) 2026 krmll4444
+
+This product is licensed under the MIT License. See LICENSE for the full text.
+
+Third-party / platform notices
+------------------------------
+- .NET / Windows Desktop (WPF, Windows Forms): Copyright (c) .NET Foundation
+  and Contributors. Licensed under the MIT License.
+  https://github.com/dotnet/core/blob/main/LICENSE.TXT
+
+- Windows Runtime System Media Transport Controls (SMTC) and related WinRT APIs
+  are provided by Microsoft Windows. Use of those APIs is subject to the
+  Windows license terms that apply to the user's system.
+
+- Segoe UI is a trademark of Microsoft Corporation. The font is used as the
+  system UI font when available on Windows; it is not redistributed by this
+  project.
+
+No trademarks of Microsoft or other third parties are claimed by this project.

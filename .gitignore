@@ -1,7 +1,9 @@
 # Build
 dist/
-TrayMedia.App/bin/
-TrayMedia.App/obj/
+**/bin/
+**/obj/
+TestResults/
+tools/
 
 # IDE / OS
 .vs/

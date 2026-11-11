@@ -1,12 +1,22 @@
 param(
     [ValidateSet("portable", "runtime")]
-    [string]$Mode = "portable"
+    [string]$Mode = "portable",
+
+    [switch]$SkipTests
 )
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $project = Join-Path $root "TrayMedia.App\TrayMedia.csproj"
 $out = Join-Path $root "dist"
+$testScript = Join-Path $root "test.ps1"
+
+if (-not $SkipTests) {
+    & $testScript -Configuration Release
+    if ($LASTEXITCODE -ne 0) {
+        throw "Build aborted: tests failed."
+    }
+}
 
 if (Test-Path $out) {
     Remove-Item -Recurse -Force $out
@@ -25,6 +35,10 @@ if ($Mode -eq "portable") {
         -p:PublishSingleFile=true `
         -p:EnableCompressionInSingleFile=false `
         -o $out
+}
+
+if ($LASTEXITCODE -ne 0) {
+    throw "Publish failed (exit $LASTEXITCODE)."
 }
 
 $exe = Get-Item (Join-Path $out "TrayMedia.exe")

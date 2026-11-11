@@ -14,6 +14,15 @@ public static class WindowsChrome
     private static readonly MediaColor FallbackLight = MediaColor.FromRgb(243, 243, 243);
     private static readonly MediaColor DefaultAccent = MediaColor.FromRgb(0, 120, 212);
 
+    /// <summary>Apps theme (Settings / WPF windows), not taskbar chrome.</summary>
+    public static bool AppsUseDarkTheme()
+    {
+        var appsUseLightTheme = ReadDword(
+            @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+            "AppsUseLightTheme");
+        return appsUseLightTheme is null or 0;
+    }
+
     public static ChromeTheme Read()
     {
         var enableTransparency = ReadDword(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency");

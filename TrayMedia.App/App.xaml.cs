@@ -134,16 +134,16 @@ public partial class App : System.Windows.Application
             return;
         }
 
-        _settingsWindow = new SettingsWindow(_settings);
-        var result = _settingsWindow.ShowDialog();
-        if (result == true && _settingsWindow.Saved)
-        {
-            _settings = AppSettings.Load();
-            ApplyTrayPinPreference();
-            ScheduleTrayPromotion();
-        }
+        _settingsWindow = new SettingsWindow(_settings, OnSettingsChanged);
+        _settingsWindow.Closed += (_, _) => _settingsWindow = null;
+        _settingsWindow.Show();
+        _settingsWindow.Activate();
+    }
 
-        _settingsWindow = null;
+    private void OnSettingsChanged()
+    {
+        ApplyTrayPinPreference();
+        ScheduleTrayPromotion();
     }
 
     private void OnSmtcStateChanged(object? sender, MediaPlaybackState state)

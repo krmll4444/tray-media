@@ -233,7 +233,7 @@ public sealed class SmtcService : IDisposable
 
     private void ApplyState(MediaPlaybackState next)
     {
-        if (IsSameUiState(_state, next))
+        if (_state.SameUiAs(next))
         {
             _state = next;
             return;
@@ -241,23 +241,6 @@ public sealed class SmtcService : IDisposable
 
         _state = next;
         StateChanged?.Invoke(this, next);
-    }
-
-    private static bool IsSameUiState(MediaPlaybackState a, MediaPlaybackState b)
-    {
-        return a.IsEmpty == b.IsEmpty
-               && a.IsPlaying == b.IsPlaying
-               && a.CanPlay == b.CanPlay
-               && a.CanPause == b.CanPause
-               && a.CanNext == b.CanNext
-               && a.CanPrevious == b.CanPrevious
-               && a.CanSeek == b.CanSeek
-               && a.AlbumArtKey == b.AlbumArtKey
-               && a.Title == b.Title
-               && a.Artist == b.Artist
-               && a.AppId == b.AppId
-               && (int)a.PositionSec == (int)b.PositionSec
-               && (int)a.DurationSec == (int)b.DurationSec;
     }
 
     private static async Task<byte[]?> ReadThumbnailBytesAsync(IRandomAccessStreamReference? thumb)

@@ -111,15 +111,9 @@ public partial class MainWindow : Window
         if (width <= 0) width = 296;
         ProgressFill.Width = width * ratio;
         ProgressThumb.Margin = new Thickness(width * ratio - 5, 0, 0, 0);
-        ElapsedText.Text = FormatTime(positionSec);
-        DurationText.Text = FormatTime(durationSec);
+        ElapsedText.Text = TimeFormatting.Format(positionSec);
+        DurationText.Text = TimeFormatting.Format(durationSec);
         UpdateThumbVisibility();
-    }
-
-    private static string FormatTime(double totalSec)
-    {
-        var sec = Math.Max(0, (int)Math.Floor(totalSec));
-        return $"{sec / 60}:{sec % 60:00}";
     }
 
     private void OnProgressDown(object sender, WpfMouseButtonEventArgs e)

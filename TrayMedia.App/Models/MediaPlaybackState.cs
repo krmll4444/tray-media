@@ -23,4 +23,22 @@ public sealed class MediaPlaybackState
     public bool CanNext { get; init; }
     public bool CanPrevious { get; init; }
     public bool CanSeek { get; init; }
+
+    /// <summary>
+    /// Returns true when UI-visible fields match (position rounded to whole seconds).
+    /// </summary>
+    public bool SameUiAs(MediaPlaybackState other) =>
+        IsEmpty == other.IsEmpty
+        && IsPlaying == other.IsPlaying
+        && CanPlay == other.CanPlay
+        && CanPause == other.CanPause
+        && CanNext == other.CanNext
+        && CanPrevious == other.CanPrevious
+        && CanSeek == other.CanSeek
+        && AlbumArtKey == other.AlbumArtKey
+        && Title == other.Title
+        && Artist == other.Artist
+        && AppId == other.AppId
+        && (int)PositionSec == (int)other.PositionSec
+        && (int)DurationSec == (int)other.DurationSec;
 }

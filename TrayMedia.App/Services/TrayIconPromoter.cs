@@ -53,20 +53,17 @@ public static class TrayIconPromoter
         using var parent = Registry.CurrentUser.OpenSubKey(root, writable: true);
         if (parent is null) return;
 
-        var exePath = (Environment.ProcessPath
+        var exePath = Environment.ProcessPath
                        ?? Process.GetCurrentProcess().MainModule?.FileName
-                       ?? "").ToLowerInvariant();
-        var exeName = Path.GetFileNameWithoutExtension(exePath);
+                       ?? "";
 
         foreach (var subName in parent.GetSubKeyNames())
         {
             using var sub = parent.OpenSubKey(subName, writable: true);
             if (sub is null) continue;
 
-            var path = (sub.GetValue("ExecutablePath") as string ?? "").ToLowerInvariant();
-            var match = (!string.IsNullOrEmpty(exePath) && path.Equals(exePath, StringComparison.OrdinalIgnoreCase))
-                        || (!string.IsNullOrEmpty(exeName) && path.Contains(exeName, StringComparison.OrdinalIgnoreCase));
-            if (!match) continue;
+            var path = sub.GetValue("ExecutablePath") as string ?? "";
+            if (!MatchesOwnExecutable(path, exePath)) continue;
 
             // Respect an existing explicit hide only when we're not forcing pin from Settings.
             sub.SetValue("IsPromoted", pinToTray ? 1 : 0, RegistryValueKind.DWord);
@@ -102,17 +99,14 @@ public static class TrayIconPromoter
             notifier.RegisterCallback(callback, out var handle);
             notifier.UnregisterCallback(handle);
 
-            var exeHint = Path.GetFileNameWithoutExtension(
-                Environment.ProcessPath
-                ?? Process.GetCurrentProcess().MainModule?.FileName
-                ?? "TrayMedia").ToLowerInvariant();
+            var ourExe = Environment.ProcessPath
+                         ?? Process.GetCurrentProcess().MainModule?.FileName
+                         ?? "TrayMedia.exe";
 
             foreach (var item in callback.Items)
             {
-                var exe = (item.exe_name ?? "").ToLowerInvariant();
                 var sameHwnd = item.hwnd == hwnd && item.id == iconId;
-                var sameExe = !string.IsNullOrEmpty(exeHint)
-                              && exe.IndexOf(exeHint, StringComparison.OrdinalIgnoreCase) >= 0;
+                var sameExe = MatchesOwnExecutable(item.exe_name ?? "", ourExe);
                 if (!sameHwnd && !sameExe) continue;
 
                 var writable = NotifyItemWritable.FromNotifyItem(item);
@@ -125,6 +119,40 @@ public static class TrayIconPromoter
         {
             Marshal.ReleaseComObject(instance);
         }
+    }
+
+    /// <summary>
+    /// Exact path match, or same leaf filename TrayMedia.exe — never substring Contains.
+    /// </summary>
+    public static bool MatchesOwnExecutable(string candidatePath, string ourExePath)
+    {
+        if (string.IsNullOrWhiteSpace(candidatePath) || string.IsNullOrWhiteSpace(ourExePath))
+            return false;
+
+        string candidateFull;
+        string ourFull;
+        try
+        {
+            candidateFull = Path.GetFullPath(candidatePath.Trim());
+            ourFull = Path.GetFullPath(ourExePath.Trim());
+        }
+        catch
+        {
+            // Some Explorer entries are not full paths — fall back to leaf name only.
+            var candidateLeaf = Path.GetFileName(candidatePath.Trim());
+            var ourLeaf = Path.GetFileName(ourExePath.Trim());
+            return !string.IsNullOrEmpty(candidateLeaf)
+                   && candidateLeaf.Equals(ourLeaf, StringComparison.OrdinalIgnoreCase)
+                   && ourLeaf.Equals("TrayMedia.exe", StringComparison.OrdinalIgnoreCase);
+        }
+
+        if (candidateFull.Equals(ourFull, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        var candidateName = Path.GetFileName(candidateFull);
+        var ourName = Path.GetFileName(ourFull);
+        return candidateName.Equals(ourName, StringComparison.OrdinalIgnoreCase)
+               && ourName.Equals("TrayMedia.exe", StringComparison.OrdinalIgnoreCase);
     }
 
     private static void FreeWritable(ref NotifyItemWritable item)
