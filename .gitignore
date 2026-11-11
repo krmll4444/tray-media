@@ -1,0 +1,13 @@
+# Build
+dist/
+TrayMedia.App/bin/
+TrayMedia.App/obj/
+
+# IDE / OS
+.vs/
+.idea/
+*.user
+*.suo
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows10.0.17763.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <AssemblyName>TrayMedia</AssemblyName>
+    <RootNamespace>TrayMedia</RootNamespace>
+    <Product>Tray Media</Product>
+    <AssemblyTitle>Tray Media</AssemblyTitle>
+    <Version>1.0.0-beta.1</Version>
+    <Company>krmll4444</Company>
+    <Authors>krmll4444</Authors>
+    <Description>Windows 10 Fluent tray media popover with SMTC control</Description>
+    <LangVersion>latest</LangVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\*.png" />
+  </ItemGroup>
+</Project>
