@@ -1,6 +1,12 @@
 ; Tray Media — Inno Setup 6 installer
+; Version is injected by build-installer.ps1 from TrayMedia.csproj (/DMyAppVersion=...).
 #define MyAppName "Tray Media"
-#define MyAppVersion "1.0.0-beta.1"
+#ifndef MyAppVersion
+  #define MyAppVersion "0.0.0"
+#endif
+#ifndef MyAppVersionNumeric
+  #define MyAppVersionNumeric "0.0.0.0"
+#endif
 #define MyAppPublisher "krmll4444"
 #define MyAppURL "https://github.com/krmll4444/tray-media"
 #define MyAppExeName "TrayMedia.exe"
@@ -41,7 +47,7 @@ RestartApplications=no
 DisableWelcomePage=no
 DisableDirPage=no
 AllowNoIcons=yes
-VersionInfoVersion=1.0.0.1
+VersionInfoVersion={#MyAppVersionNumeric}
 VersionInfoCompany={#MyAppPublisher}
 VersionInfoDescription={#MyAppName} Setup
 VersionInfoCopyright=Copyright (c) 2026 {#MyAppPublisher}

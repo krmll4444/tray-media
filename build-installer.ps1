@@ -7,12 +7,15 @@ param(
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $root "build-version.ps1")
+
 $project = Join-Path $root "TrayMedia.App\TrayMedia.csproj"
 $dist = Join-Path $root "dist"
 $payload = Join-Path $dist "installer-payload"
 $iss = Join-Path $root "installer\TrayMedia.iss"
 $testScript = Join-Path $root "test.ps1"
-$version = "1.0.0-beta.1"
+$version = Get-TrayMediaVersion -ProjectPath $project
+$versionNumeric = Get-TrayMediaVersionNumeric -Version $version
 
 $isccCandidates = @(
     "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
@@ -36,6 +39,7 @@ if (Test-Path $payload) {
 }
 New-Item -ItemType Directory -Path $payload | Out-Null
 
+Write-Host "Version:   $version (from TrayMedia.csproj)"
 Write-Host "Publishing payload ($Mode)..."
 if ($Mode -eq "portable") {
     dotnet publish $project -c Release -r win-x64 --self-contained true `
@@ -55,7 +59,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "Compiling installer with Inno Setup..."
-& $iscc $iss
+& $iscc "/DMyAppVersion=$version" "/DMyAppVersionNumeric=$versionNumeric" $iss
 if ($LASTEXITCODE -ne 0) {
     throw "ISCC failed (exit $LASTEXITCODE)."
 }

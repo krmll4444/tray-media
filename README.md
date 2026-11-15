@@ -3,7 +3,7 @@
 Windows 10 Fluent tray media popover. Controls system Now Playing via SMTC.
 
 **Author:** krmll4444  
-**Version:** 1.0.0-beta.1  
+**Version:** see `<Version>` in `TrayMedia.App/TrayMedia.csproj` (single source of truth)  
 **Stack:** C# / WPF  
 **License:** [MIT](LICENSE) © 2026 krmll4444
 
@@ -64,7 +64,7 @@ Requires [Inno Setup 6](https://jrsoftware.org/isinfo.php) (`winget install JRSo
 .\build-installer.ps1 -Mode portable
 ```
 
-Output: `dist/TrayMedia-Setup-1.0.0-beta.1.exe`
+Output: `dist/TrayMedia-Setup-<version>.exe` (version from the csproj)
 
 The wizard shows the EULA (license + privacy summary) and requires acceptance. **Launch at Windows sign-in** is checked by default (user can clear it).
 

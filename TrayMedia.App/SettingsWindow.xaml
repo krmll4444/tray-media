@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Tray Media"
         Width="560"
-        Height="440"
+        Height="560"
         MinWidth="440"
-        MinHeight="360"
+        MinHeight="420"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
         FontFamily="Segoe UI"
@@ -143,12 +143,101 @@
                    Foreground="#FF5D5D5D"
                    Text="If the icon is still hidden, open Settings → Personalization → Taskbar → Select which icons appear on the taskbar."/>
 
+        <TextBlock x:Name="HotkeysSectionLabel"
+                   Text="Volume hotkeys"
+                   FontSize="18"
+                   FontWeight="SemiBold"
+                   Foreground="#FF1A1A1A"
+                   Margin="0,32,0,18"/>
+
+        <Grid x:Name="VolumeHotkeysRow" Margin="0,0,0,22">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel VerticalAlignment="Center" Margin="0,0,24,0">
+            <TextBlock x:Name="VolumeHotkeysTitle"
+                       Text="Control system volume"
+                       FontSize="15"
+                       Foreground="#FF1A1A1A"/>
+            <TextBlock x:Name="VolumeHotkeysDesc"
+                       Margin="0,4,0,0"
+                       Text="Change the Windows master volume with a keyboard shortcut while Tray Media is running."
+                       FontSize="12"
+                       TextWrapping="Wrap"
+                       Foreground="#FF5D5D5D"/>
+          </StackPanel>
+          <ToggleButton x:Name="VolumeHotkeysToggle"
+                        Grid.Column="1"
+                        Style="{StaticResource WinToggle}"
+                        VerticalAlignment="Center"
+                        Checked="OnVolumeHotkeysChanged"
+                        Unchecked="OnVolumeHotkeysChanged"/>
+        </Grid>
+
+        <Grid x:Name="VolumeUpRow" Margin="0,0,0,16">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+            <TextBlock x:Name="VolumeUpTitle"
+                       Text="Volume up"
+                       FontSize="15"
+                       Foreground="#FF1A1A1A"/>
+            <TextBlock x:Name="VolumeUpChord"
+                       Margin="0,4,0,0"
+                       FontSize="12"
+                       TextWrapping="Wrap"
+                       Foreground="#FF5D5D5D"/>
+          </StackPanel>
+          <Button x:Name="VolumeUpCaptureBtn"
+                  Grid.Column="1"
+                  MinWidth="96"
+                  Padding="12,6"
+                  VerticalAlignment="Center"
+                  Content="Change"
+                  Click="OnVolumeUpCaptureClick"/>
+        </Grid>
+
+        <Grid x:Name="VolumeDownRow" Margin="0,0,0,8">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+            <TextBlock x:Name="VolumeDownTitle"
+                       Text="Volume down"
+                       FontSize="15"
+                       Foreground="#FF1A1A1A"/>
+            <TextBlock x:Name="VolumeDownChord"
+                       Margin="0,4,0,0"
+                       FontSize="12"
+                       TextWrapping="Wrap"
+                       Foreground="#FF5D5D5D"/>
+          </StackPanel>
+          <Button x:Name="VolumeDownCaptureBtn"
+                  Grid.Column="1"
+                  MinWidth="96"
+                  Padding="12,6"
+                  VerticalAlignment="Center"
+                  Content="Change"
+                  Click="OnVolumeDownCaptureClick"/>
+        </Grid>
+
+        <TextBlock x:Name="HotkeyHintText"
+                   Margin="0,4,0,0"
+                   FontSize="12"
+                   TextWrapping="Wrap"
+                   Foreground="#FF5D5D5D"
+                   Text="Default: Right Ctrl + Page Up / Page Down. Click Change, then press a new shortcut (Esc cancels)."/>
+
         <TextBlock x:Name="LegalText"
                    Margin="0,28,0,0"
                    FontSize="11"
                    TextWrapping="Wrap"
                    Foreground="#FF5D5D5D"
-                   Text="Tray Media 1.0.0-beta.1  ·  © 2026 krmll4444  ·  MIT License"/>
+                   Text="Tray Media"/>
       </StackPanel>
     </ScrollViewer>
   </Grid>

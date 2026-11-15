@@ -18,6 +18,7 @@ public partial class App : System.Windows.Application
     private SettingsWindow? _settingsWindow;
     private TrayIconService? _tray;
     private SmtcService? _smtc;
+    private VolumeHotkeyService? _volumeHotkeys;
     private AppSettings _settings = AppSettings.Load();
     private ChromeTheme _theme = WindowsChrome.Read();
     private MediaPlaybackState _playerState = MediaPlaybackState.Empty;
@@ -37,6 +38,9 @@ public partial class App : System.Windows.Application
         }
 
         AutostartService.SetEnabled(_settings.Autostart);
+
+        _volumeHotkeys = new VolumeHotkeyService();
+        ApplyVolumeHotkeys();
 
         _smtc = new SmtcService();
         _smtc.StateChanged += OnSmtcStateChanged;
@@ -93,6 +97,7 @@ public partial class App : System.Windows.Application
         _promoteCts?.Cancel();
         _promoteCts?.Dispose();
         SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
+        _volumeHotkeys?.Dispose();
         _smtc?.Dispose();
         _tray?.Dispose();
         _mutex?.ReleaseMutex();
@@ -134,8 +139,12 @@ public partial class App : System.Windows.Application
             return;
         }
 
-        _settingsWindow = new SettingsWindow(_settings, OnSettingsChanged);
-        _settingsWindow.Closed += (_, _) => _settingsWindow = null;
+        _settingsWindow = new SettingsWindow(_settings, OnSettingsChanged, SetVolumeHotkeysPaused);
+        _settingsWindow.Closed += (_, _) =>
+        {
+            SetVolumeHotkeysPaused(false);
+            _settingsWindow = null;
+        };
         _settingsWindow.Show();
         _settingsWindow.Activate();
     }
@@ -144,7 +153,18 @@ public partial class App : System.Windows.Application
     {
         ApplyTrayPinPreference();
         ScheduleTrayPromotion();
+        ApplyVolumeHotkeys();
     }
+
+    private void ApplyVolumeHotkeys()
+    {
+        _volumeHotkeys?.Apply(
+            _settings.VolumeHotkeysEnabled,
+            _settings.GetVolumeUpHotkey(),
+            _settings.GetVolumeDownHotkey());
+    }
+
+    private void SetVolumeHotkeysPaused(bool paused) => _volumeHotkeys?.SetPaused(paused);
 
     private void OnSmtcStateChanged(object? sender, MediaPlaybackState state)
     {

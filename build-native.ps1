@@ -7,9 +7,12 @@ param(
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $root "build-version.ps1")
+
 $project = Join-Path $root "TrayMedia.App\TrayMedia.csproj"
 $out = Join-Path $root "dist"
 $testScript = Join-Path $root "test.ps1"
+$version = Get-TrayMediaVersion -ProjectPath $project
 
 if (-not $SkipTests) {
     & $testScript -Configuration Release
@@ -22,6 +25,7 @@ if (Test-Path $out) {
     Remove-Item -Recurse -Force $out
 }
 
+Write-Host "Version: $version (from TrayMedia.csproj)"
 if ($Mode -eq "portable") {
     # Single-file self-contained: no .NET install needed (~73 MB).
     dotnet publish $project -c Release -r win-x64 --self-contained true `
@@ -42,7 +46,6 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 $exe = Get-Item (Join-Path $out "TrayMedia.exe")
-$version = "1.0.0-beta.1"
 $labeled = Join-Path $out "TrayMedia-$version.exe"
 Copy-Item $exe.FullName $labeled -Force
 

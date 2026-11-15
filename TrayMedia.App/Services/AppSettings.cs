@@ -17,6 +17,9 @@ public sealed class AppSettings
 
     public bool Autostart { get; set; }
     public bool PinToTray { get; set; } = true;
+    public bool VolumeHotkeysEnabled { get; set; } = true;
+    public string VolumeUpHotkey { get; set; } = HotkeySpec.DefaultVolumeUp;
+    public string VolumeDownHotkey { get; set; } = HotkeySpec.DefaultVolumeDown;
 
     public static string SettingsPath
     {
@@ -78,12 +81,28 @@ public sealed class AppSettings
             var json = File.ReadAllText(path);
             if (string.IsNullOrWhiteSpace(json)) return new AppSettings();
 
-            return JsonSerializer.Deserialize<AppSettings>(json, JsonOptions) ?? new AppSettings();
+            var loaded = JsonSerializer.Deserialize<AppSettings>(json, JsonOptions) ?? new AppSettings();
+            loaded.NormalizeHotkeys();
+            return loaded;
         }
         catch
         {
             return new AppSettings();
         }
+    }
+
+    public HotkeySpec GetVolumeUpHotkey() =>
+        HotkeySpec.ParseOrDefault(VolumeUpHotkey, HotkeySpec.DefaultVolumeUp);
+
+    public HotkeySpec GetVolumeDownHotkey() =>
+        HotkeySpec.ParseOrDefault(VolumeDownHotkey, HotkeySpec.DefaultVolumeDown);
+
+    public void NormalizeHotkeys()
+    {
+        var up = HotkeySpec.ParseOrDefault(VolumeUpHotkey, HotkeySpec.DefaultVolumeUp);
+        var down = HotkeySpec.ParseOrDefault(VolumeDownHotkey, HotkeySpec.DefaultVolumeDown);
+        VolumeUpHotkey = up.ToStorageString();
+        VolumeDownHotkey = down.ToStorageString();
     }
 
     public void Save(string? path = null)
